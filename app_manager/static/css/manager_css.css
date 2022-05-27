@@ -1,0 +1,17 @@
+.header{
+    text-align: center;
+    margin-top: 2%;
+}
+
+.header h1{
+    color: white;
+}
+
+.list-status{
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+    margin: 3%;
+}

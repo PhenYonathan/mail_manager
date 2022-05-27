@@ -1,0 +1,50 @@
+{% extends "app_manager/base.html" %}
+{% load static %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'css/manager_css.css' %}">
+{% endblock %}
+
+{% block activeMM %}active{% endblock %}
+
+{% block content %}
+
+    <div class="header">
+        <h1>Status</h1>
+        <hr>
+    </div>
+
+    <div class="list-status">
+        <div class="card" style="width: 25rem;">
+          <div class="card-body">
+            <h5 class="card-title">Probléme(s) détecté(s)</h5>
+            <h6 class="card-subtitle mb-2 text-muted">X mails</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="{% url 'app_more' %}" class="card-link">Plus de détails</a>
+          </div>
+        </div>
+
+        <div class="card" style="width: 25rem;">
+          <div class="card-body">
+            <h5 class="card-title">Status inconnu</h5>
+            <h6 class="card-subtitle mb-2 text-muted">X mails</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="card-link">Plus de détails</a>
+          </div>
+        </div>
+
+        <div class="card" style="width: 25rem;">
+          <div class="card-body">
+            <h5 class="card-title">R.A.S</h5>
+            <h6 class="card-subtitle mb-2 text-muted">X mails</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="card-link">Plus de détails</a>
+          </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

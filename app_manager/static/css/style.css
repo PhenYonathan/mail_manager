@@ -1,0 +1,15 @@
+
+
+body{
+    background: linear-gradient(90deg, #C7C5F4, #776BCC);
+}
+
+.connect{
+    display: flex;
+    align-items: baseline;
+}
+
+.connect p{
+    margin-left: 10px;
+    margin-right: 10px;
+}

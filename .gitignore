@@ -1,0 +1,10 @@
+# Environement files
+venv/
+.env
+
+# Django / Python folders
+__pycache__/
+db.sqlite3
+
+# Idea folders
+.idea/
