@@ -14,6 +14,6 @@ body{
     margin-right: 10px;
 }
 
-/*.error_page{*/
-/*    margin: 10%;*/
-/*}*/
+.error_page{
+    margin: 10%;
+}
