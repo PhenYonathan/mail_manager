@@ -26,4 +26,5 @@ class LogoutView(TemplateView):
     def get(self, request, **kwargs):
         logout(request)
 
-        return render(request, self.template_name)
+        # return render(request, self.template_name)
+        return redirect('home')
