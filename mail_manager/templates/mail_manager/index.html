@@ -14,16 +14,17 @@
     <div class="container">
 	<div class="screen">
 		<div class="screen__content">
-			<form class="login">
+			<form method="POST" role="form" class="login">
+                {% csrf_token %}
 				<div class="login__field">
-					<i class="login__icon fas fa-user"></i>
-					<input type="text" class="login__input" placeholder="Email">
+					<i class="login__icon fas fa-user fa-beat" style="--fa-animation-duration: 5s;"></i>
+					<input type="text" class="login__input" placeholder="Identifiant" name="username">
 				</div>
 				<div class="login__field">
-					<i class="login__icon fas fa-lock"></i>
-					<input type="password" class="login__input" placeholder="Mot de passe">
+					<i class="login__icon fas fa-lock fa-beat" style="--fa-animation-duration: 5s;"></i>
+					<input type="password" class="login__input" placeholder="Mot de passe" name="password">
 				</div>
-				<button class="button login__submit">
+				<button class="button login__submit" type="submit">
 					<span class="button__text">Se connecter</span>
 					<i class="button__icon fas fa-chevron-right"></i>
 				</button>
