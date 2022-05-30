@@ -18,11 +18,14 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 
 from app_manager.views import HomeAppView, AppMoreInfos
-from mail_manager.views import HomeView
+from mail_manager.views import HomeView, LogoutView
 
 urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('manager/', login_required(HomeAppView.as_view()), name="app_home"),
     path('manager/more', login_required(AppMoreInfos.as_view()), name="app_more"),
     path('admin/', admin.site.urls, name='admin'),
+    path('logout/', LogoutView.as_view(), name='logout')
 ]
+
+handler404 = "mail_manager.views.error_404"
