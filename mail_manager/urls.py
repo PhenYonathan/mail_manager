@@ -24,5 +24,5 @@ urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('manager/', login_required(HomeAppView.as_view()), name="app_home"),
     path('manager/more', login_required(AppMoreInfos.as_view()), name="app_more"),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
 ]
