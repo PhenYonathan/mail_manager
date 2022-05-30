@@ -12,10 +12,10 @@
     <title>Typia | {% block title %}{% endblock %}</title>
 
     {# CDN #}
-    <script src="https://kit.fontawesome.com/1999efdd56.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a2d7b6d3c7.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
@@ -29,27 +29,25 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link {% block activeH %}{% endblock %}" aria-current="page" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link {% block activeMM %}{% endblock %}" href="{% url 'app_home' %}">Mail manager</a>
             </li>
           <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin:index' %}">Interface admin</a>
+              <a class="nav-link" href="{% url 'admin:index' %}" target="_blank">Interface admin</a>
             </li>
           </ul>
         </div>
 
 {#        <h1>Mail manager</h1>#}
 
-      {% if user.is_authenticated %}
-        <div class="connect">
-            <h3>Bonjour, {{ user }}</h3>
-            <p>(<i>{{ user.email }}</i>)</p>
-        </div>
-      {% else %}
-          <a href="{% url 'home' %}"><h3>Se connecter</h3></a>
-      {% endif %}
+        {% if user.is_authenticated %}
+            <div class="connect">
+                Bonjour, {{ user }}
+                (<i>{{ user.email }}</i>)
+            </div>
+            <a href="{% url 'logout' %}"><i class="fas fa-sign-out"></i></a>
+          {% else %}
+              <a class="nav-link {% block activeH %}{% endblock %}" aria-current="page" href="{% url 'home' %}"><h3>Se connecter</h3></a>
+          {% endif %}
 
       </div>
     </nav>
