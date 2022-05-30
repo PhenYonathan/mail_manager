@@ -27,3 +27,5 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('logout/', LogoutView.as_view(), name='logout')
 ]
+
+handler404 = "mail_manager.views.error_404"

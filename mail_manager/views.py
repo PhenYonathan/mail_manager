@@ -28,3 +28,8 @@ class LogoutView(TemplateView):
 
         # return render(request, self.template_name)
         return redirect('home')
+
+
+def error_404(request, exception):
+    return render(request, "mail_manager/404.html")
+
