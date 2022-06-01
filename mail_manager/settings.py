@@ -77,19 +77,24 @@ WSGI_APPLICATION = 'mail_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-
-        'ENGINE': env("ENGINE"),
-        'NAME': env("NAME"),
-        'HOST': env("HOST"),
-        'PORT': env("PORT"),
-        'USER': env("USER"),
-        'PASSWORD': env("PASSWORD"),
+if env("ENGINE") == "sqlite3":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+elif env("ENGINE") == "mysql":
+    DATABASES = {
+        'default': {
+            'ENGINE': f'django.db.backends.mysql',
+            'NAME': env("NAME"),
+            'HOST': env("HOST"),
+            'PORT': env("PORT"),
+            'USER': env("USER"),
+            'PASSWORD': env("PASSWORD"),
+        }
+    }
 
 
 # Password validation
