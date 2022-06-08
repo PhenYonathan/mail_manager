@@ -1,3 +1,27 @@
+# ------------------ Configuration Django ------------------ #
+#                       > settings.py <                      #
+# ---------------------------------------------------------- #
 SECRET_KEY=''
-DEBUG=True
-ALLOWED_HOSTS='127.0.0.1'
+DEBUG=True                  # True / False
+ALLOWED_HOSTS='127.0.0.1'   # Localhost par défaut
+
+# --------------------- Base de donnée --------------------- #
+#                       > settings.py <                      #
+# ---------------------------------------------------------- #
+ENGINE=                     # 'mysql' ou 'sqlite3' selon la base utilisée
+
+# Ci-dessous uniquement pour une base mysql
+NAME=                       # Nom de la base
+HOST=
+PORT=
+
+# Identifiants pour la BDD
+USER=
+PASSWORD=
+
+# -------------------------- Mail -------------------------- #
+#                   > app_manager/views.py <                 #
+# ---------------------------------------------------------- #
+USERMAIL=                   # Mail pour se connecter
+MDPMAIL=                    # Mot de passe
+
