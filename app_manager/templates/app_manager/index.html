@@ -24,11 +24,11 @@
             <details>
             <summary>Liste des serveurs comportants une erreur.</summary>
             {% for listeError in lstSubjectError %}
-                {{ listeError }}<br>
+                {{ listeError|capfirst }}<br>
             {% endfor %}
             </details>
               <br>
-            <a href="{% url 'app_more' %}" class="card-link">Plus de détails</a>
+            <a href="{% url 'app_more' status="error" %}" class="card-link">Plus de détails</a>
           </div>
         </div>
 
@@ -39,11 +39,11 @@
             <details>
                 <summary>Liste des serveurs où tout vas bien.</summary>
                 {% for listeRAS in lstSubjectRAS %}
-                    {{ listeRAS }}<br>
+                    {{ listeRAS|capfirst }}<br>
                 {% endfor %}
             </details>
               <br>
-            <a href="#" class="card-link">Plus de détails</a>
+            <a href="{% url 'app_more' status="ras" %}" class="card-link">Plus de détails</a>
           </div>
         </div>
 
@@ -52,7 +52,6 @@
             <h5 class="card-title">Status inconnu</h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ nbInconnu }} mails non identifié</h6>
             <p class="card-text">Nombre de mails attendus qui ne sont pas arrivés et/ou de mails non identifiés.</p>
-            <a href="#" class="card-link">Plus de détails</a>
           </div>
         </div>
     </div>
