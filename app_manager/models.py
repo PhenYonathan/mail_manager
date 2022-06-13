@@ -48,18 +48,29 @@ m.list()
 # Recherche
 date = (datetime.date.today() - datetime.timedelta(30)).strftime("%d-%b-%Y")
 msg_from = '"Yonathan Cardoso"'
+
 # ----------------------------------------------------- #
 
 
-# Fonction qui decode les chaines de caractére qui viennent des headers des mails
 def decode_str(word):
+    """
+    decode_str decode les chaines de caractère qui viennent des headers des mails.
+
+    :param p1: Entrez un string provenant d'un header de mail
+    :return: un string décodé
+    """
     h = make_header(decode_header(word))
     s = str(h)
     return s
 
 
-# Fonction qui permet de récupérer les mails choisis pour les sortir dans un dico
 def get_mails():
+    """
+    get_mails est une fonction qui permet de récupérer les mails choisis pour les sortir dans un dico.
+
+    :return: une liste contenant deux listes, une premiere de mails ras et une seconde d'erreurs. Chacune d'elle
+    contient des dictionnaires avec toutes les informations nécessaires
+    """
     # Déclarations des variables utiles. Ne pas toucher
     final_list = []
     lst_mails_ras = []
@@ -95,8 +106,15 @@ def get_mails():
     return final_list
 
 
-# Fonction qui permet de compter le nombre de RAS et ERREUR
 def count_nb_mails():
+    """
+    count_nb_mails permet de compter le nombre de RAS et ERREUR.
+
+    :return: une liste contenant 3 paramétres :
+        - Le nombre de RAS
+        - Le nombre d'erreurs
+        - Le nombre de mails non reçus
+    """
     # Déclarations des variables utiles. Ne pas toucher
     ras = erreur = 0
 
