@@ -1,81 +1,24 @@
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.shortcuts import render
-from django.http import Http404
-
-from django.views.generic import TemplateView, ListView
-
-import environ
-
-from mail_manager.settings import BASE_DIR
-
-env = environ.Env()
-environ.Env.read_env(env_file=str(BASE_DIR / "mail_manager" / ".env"))
-
-##########################
-# Récupération des mails #
-##########################
-
-import imaplib
-import email
-
-server = "imap.gmail.com"
-imap = imaplib.IMAP4_SSL(server)
-
-username = env("USERMAIL")
-password = env("MDPMAIL")
-
-imap.login(username, password)
-
-res, messages = imap.select('"INBOX"')
-
-messages = int(messages[0])
-
-##########################
+from django.views.generic import TemplateView
+from app_manager import models
 
 
 class HomeAppView(TemplateView):
     template_name = "app_manager/index.html"
+    listMails = models.get_mails()
 
-    # A définir selon besoin
-    n = 10
-    attendu = 8
-
-    # Déclarations des variables utiles. Ne pas toucher
-    ras = 0
-    erreur = 0
-    lstSubjectRAS = []
-    lstSubjectError = []
-
-    for i in range(messages, messages - n, -1):
-        res, msg = imap.fetch(str(i), "(RFC822)")
-        for response in msg:
-            if isinstance(response, tuple):
-                msg = email.message_from_bytes(response[1])
-                From = msg["From"]
-                subject = msg["Subject"]
-                pos = subject.find('serveur')
-
-                if "[RAS]" in subject:
-                    ras = ras + 1
-                    lstSubjectRAS.append(subject[pos:])
-                if "[ERREUR]" in subject:
-                    erreur = erreur + 1
-                    lstSubjectError.append(subject[pos:])
-
-    nbInconnu = n - (ras + erreur)
-    nbSI = attendu - (ras + erreur)
+    # affine_ras = listMails[0]
+    affine_ras = [sub['Subject'] for sub in listMails[0]]
+    affine_erreur = [sub['Subject'] for sub in listMails[1]]
 
     def get_context_data(self, **kwargs):
         context = super(HomeAppView, self).get_context_data(**kwargs)
         context.update(
             {
-                'ras': self.ras,
-                'erreur': self.erreur,
-                'nbInconnu': self.nbInconnu,
-                'nbSI': self.nbSI,
-                'lstSubjectError': self.lstSubjectError,
-                'lstSubjectRAS': self.lstSubjectRAS,
+                'ras': models.count_nb_mails().get('ras', 'En attente'),
+                'erreur': models.count_nb_mails().get('erreur', 'En attente'),
+                'manque': models.count_nb_mails().get('manque', 'En attente'),
+                'lstSubjectError': self.affine_erreur,
+                'lstSubjectRAS': self.affine_ras,
             }
         )
         return context
@@ -83,41 +26,3 @@ class HomeAppView(TemplateView):
 
 class AppMoreInfos(TemplateView):
     template_name = "app_manager/more_infos.html"
-
-    # A définir selon besoin
-    n = 10
-    attendu = 8
-
-    # Déclarations des variables utiles. Ne pas toucher
-    lstSubjectRAS = []
-    lstSubjectError = []
-    lstFromRAS = []
-    lstFromError = []
-
-    for i in range(messages, messages - n, -1):
-        res, msg = imap.fetch(str(i), "(RFC822)")
-        for response in msg:
-            if isinstance(response, tuple):
-                msg = email.message_from_bytes(response[1])
-                From = msg["From"]
-                subject = msg["Subject"]
-
-                if "[RAS]" in subject:
-                    lstSubjectRAS.append(subject)
-                    lstFromRAS.append(From)
-                if "[ERREUR]" in subject:
-                    lstSubjectError.append(subject)
-                    lstFromError.append(From)
-
-    def get_context_data(self, **kwargs):
-        context = super(AppMoreInfos, self).get_context_data(**kwargs)
-        context.update(
-            {
-                'lstSubjectError': self.lstSubjectError,
-                'lstSubjectRAS': self.lstSubjectRAS,
-                'lstFromError': self.lstFromError,
-                'lstFromRAS': self.lstFromRAS,
-            }
-        )
-        return context
-
