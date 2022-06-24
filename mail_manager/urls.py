@@ -21,8 +21,8 @@ from app_manager.views import HomeAppView, AppMoreInfos
 from mail_manager.views import HomeView, LogoutView
 
 urlpatterns = [
-    path('', HomeView.as_view(), name="home"),
-    path('manager/', login_required(HomeAppView.as_view()), name="app_home"),
+    path('login/', HomeView.as_view(), name="login"),
+    path('', login_required(HomeAppView.as_view()), name="app_home"),
     path('manager/<str:status>', login_required(AppMoreInfos.as_view()), name="app_more"),
     path('admin/', admin.site.urls, name='admin'),
     path('logout/', LogoutView.as_view(), name='logout')

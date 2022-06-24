@@ -79,7 +79,8 @@ def get_mails():
     lst_mails_erreurs = []
 
     # Tri
-    result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
+    # result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
+    result, data = m.search(None, 'SENTSINCE {date}'.format(date=date))
     ids = str(data[0], encoding)
 
     # Création d'une liste de message par ids
