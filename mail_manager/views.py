@@ -14,7 +14,6 @@ class HomeView(TemplateView):
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
-            # return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
             return redirect('app_home')
 
         return render(request, self.template_name)

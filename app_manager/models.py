@@ -4,6 +4,7 @@ import email
 from email.header import decode_header, make_header
 import imaplib
 import environ
+# from asgiref.sync import sync_to_async
 
 from mail_manager.settings import BASE_DIR
 
@@ -56,7 +57,7 @@ def decode_str(word):
     """
     decode_str decode les chaines de caractère qui viennent des headers des mails.
 
-    :param p1: Entrez un string provenant d'un header de mail
+    :param word: Entrez un string provenant d'un header de mail
     :return: un string décodé
     """
     h = make_header(decode_header(word))
@@ -64,6 +65,7 @@ def decode_str(word):
     return s
 
 
+# @sync_to_async
 def get_mails():
     """
     get_mails est une fonction qui permet de récupérer les mails choisis pour les sortir dans un dico.
@@ -106,6 +108,7 @@ def get_mails():
     return final_list
 
 
+# @sync_to_async
 def count_nb_mails():
     """
     count_nb_mails permet de compter le nombre de RAS et ERREUR.
@@ -119,7 +122,8 @@ def count_nb_mails():
     ras = erreur = 0
 
     # Tri
-    result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
+    # result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
+    result, data = m.search(None, '(SENTSINCE {date})'.format(date=date))
     ids = str(data[0], encoding)
 
     # Création d'une liste de message par ids
