@@ -4,6 +4,10 @@ body{
     background: linear-gradient(90deg, #C7C5F4, #776BCC);
 }
 
+.navbar{
+    box-shadow: 0 0 20px 0 #8f8f8f;
+}
+
 .connect{
     display: flex;
     align-items: baseline;
@@ -18,11 +22,17 @@ body{
     margin: 10%;
 }
 
-details[open] summary ~ * {
-  animation: sweep .5s ease-in-out;
+/* Tableau */
+
+.content-table{
+    margin: 3%;
 }
 
-@keyframes sweep {
-  0%    {opacity: 0; margin-left: -10px}
-  100%  {opacity: 1; margin-left: 0}
+.table{
+    background-color: white;
+    box-shadow: 0 0 20px 0 #8f8f8f;
+}
+
+.bottom-table{
+    text-align: right;
 }
