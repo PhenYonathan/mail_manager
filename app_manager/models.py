@@ -20,15 +20,21 @@ encoding = 'utf-8'
 lst_RAS = [
     "ras",
     "RAS",
-    "réussi ",
+    "réussi",
     "terminée",
-    "terminé"
+    "terminé",
+    "Rien à signalé",
+    "Ras",
+    "Terminé",
+    "Terminée"
 ]
 
-# Liste des mot d'erreurs
+# Liste des mots d'erreurs
 lst_ERREUR = [
     "ERREUR",
     "error",
+    "Error",
+    "Erreur",
     "erreur",
     "échoué"
 ]
@@ -66,7 +72,7 @@ def decode_str(word):
 
 
 # @sync_to_async
-def get_mails():
+def get_mails(status):
     """
     get_mails est une fonction qui permet de récupérer les mails choisis pour les sortir dans un dico.
 
@@ -75,8 +81,9 @@ def get_mails():
     """
     # Déclarations des variables utiles. Ne pas toucher
     final_list = []
+    lst_mails = []
     lst_mails_ras = []
-    lst_mails_erreurs = []
+    lst_mails_error = []
 
     # Tri
     # result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
@@ -97,14 +104,26 @@ def get_mails():
         s = mail["Subject"]
         temp_dict['Subject'] = decode_str(s)
 
-        if any(word in temp_dict['Subject'] for word in lst_RAS):
-            lst_mails_ras.append(temp_dict)
+        if status == "ras":
+            if any(word in temp_dict['Subject'] for word in lst_RAS):
+                lst_mails.append(temp_dict)
+                print("ras")
+        elif status == "error":
+            if any(word in temp_dict['Subject'] for word in lst_ERREUR):
+                lst_mails.append(temp_dict)
+                print("error")
+        else:
+            if any(word in temp_dict['Subject'] for word in lst_RAS):
+                lst_mails_ras.append(temp_dict)
 
-        if any(word in temp_dict['Subject'] for word in lst_ERREUR):
-            lst_mails_erreurs.append(temp_dict)
+            if any(word in temp_dict['Subject'] for word in lst_ERREUR):
+                lst_mails_error.append(temp_dict)
 
-    final_list.append(lst_mails_ras)
-    final_list.append(lst_mails_erreurs)
+    if status == "ras" or status == "error":
+        final_list = lst_mails
+    else:
+        final_list.append(lst_mails_ras)
+        final_list.append(lst_mails_error)
 
     return final_list
 
@@ -144,7 +163,7 @@ def count_nb_mails():
         if any(word in temp_dict['Subject'] for word in lst_ERREUR):
             erreur = erreur + 1
 
-    manque = 10 - (ras + erreur)
+    manque = len(id_list) - (ras + erreur)
     final_nbs = {
         'ras': ras,
         'erreur': erreur,

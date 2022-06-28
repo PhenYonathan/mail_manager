@@ -19,12 +19,16 @@
     <div class="list-status">
         <div class="card" style="width: 25rem;">
           <div class="card-body">
-            <h5 class="card-title">Probléme(s) détecté(s)</h5>
+          {% if erreur > 1 %}
+              <h5 class="card-title">Problémes détectés</h5>
+          {% else %}
+              <h5 class="card-title">Probléme détecté</h5>
+          {% endif %}
             <h6 class="card-subtitle mb-2 text-muted">{{ erreur }} mails</h6>
             <details>
             <summary>Liste des serveurs comportants une erreur.</summary>
             {% for listeError in lstSubjectError %}
-                {{ listeError|capfirst }}<br>
+                <li>{{ listeError|capfirst }}</li>
             {% endfor %}
             </details>
               <br>
@@ -39,7 +43,7 @@
             <details>
                 <summary>Liste des serveurs où tout vas bien.</summary>
                 {% for listeRAS in lstSubjectRAS %}
-                    {{ listeRAS|capfirst }}<br>
+                    <li>{{ listeRAS|capfirst }}</li>
                 {% endfor %}
             </details>
               <br>

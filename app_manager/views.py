@@ -6,7 +6,8 @@ from django.template.defaulttags import register
 class HomeAppView(TemplateView):
     template_name = "app_manager/index.html"
 
-    listMails = models.get_mails()
+    listMails = models.get_mails("all")
+
     affine_ras = [sub['Subject'] for sub in listMails[0]]
     affine_erreur = [sub['Subject'] for sub in listMails[1]]
 
@@ -24,26 +25,46 @@ class HomeAppView(TemplateView):
         return context
 
 
+# class AppMoreInfos(TemplateView):
+#     template_name = "app_manager/more_infos.html"
+#
+#     listMails = models.get_mails()
+#
+#     request = "ras"
+#
+#     if request == "ras":
+#         lst_mails = listMails[0]
+#     elif request == "error":
+#         lst_mails = listMails[1]
+#     else:
+#         lst_mails = listMails
+#
+#     compt = len(lst_mails)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(AppMoreInfos, self).get_context_data(**kwargs)
+#         context.update(
+#             {
+#                 'compt': self.compt,
+#                 'lst_mails': self.lst_mails
+#             }
+#         )
+#         return context
+
 class AppMoreInfos(TemplateView):
     template_name = "app_manager/more_infos.html"
 
-    listMails = models.get_mails()
-    request = "ras"
-
-    if request == "ras":
-        lst_mails = listMails[0]
-    elif request == "error":
-        lst_mails = listMails[1]
-
-    compt = len(lst_mails)
-
     def get_context_data(self, **kwargs):
-        context = super(AppMoreInfos, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+
+        list_mails = models.get_mails(self.kwargs.get("status"))
+
+        print(list_mails)
+
         context.update(
             {
-                'compt': self.compt,
-                'lst_mails': self.lst_mails,
-                'all': models.get_mails()
+                'compt': len(list_mails),
+                'lst_mails': list_mails,
             }
         )
         return context
