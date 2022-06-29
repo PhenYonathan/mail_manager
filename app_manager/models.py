@@ -76,8 +76,8 @@ def get_mails(status):
     """
     get_mails est une fonction qui permet de récupérer les mails choisis pour les sortir dans un dico.
 
-    :return: une liste contenant deux listes, une premiere de mails ras et une seconde d'erreurs. Chacune d'elle
-    contient des dictionnaires avec toutes les informations nécessaires
+    :param status: Entrez un string "ras", "error" ou une autre chaine.
+    :return: une liste de mails reçue dans le mois, la liste change selon le paramètre entrer
     """
     # Déclarations des variables utiles. Ne pas toucher
     final_list = []
