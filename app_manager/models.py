@@ -4,7 +4,6 @@ import email
 from email.header import decode_header, make_header
 import imaplib
 import environ
-# from asgiref.sync import sync_to_async
 
 from mail_manager.settings import BASE_DIR
 
@@ -15,29 +14,6 @@ environ.Env.read_env(env_file=str(BASE_DIR / "mail_manager" / ".env"))
 #                Déclarations divers                    #
 # ----------------------------------------------------- #
 encoding = 'utf-8'
-
-# Listes des mots de RAS
-lst_RAS = [
-    "ras",
-    "RAS",
-    "réussi",
-    "terminée",
-    "terminé",
-    "Rien à signalé",
-    "Ras",
-    "Terminé",
-    "Terminée"
-]
-
-# Liste des mots d'erreurs
-lst_ERREUR = [
-    "ERREUR",
-    "error",
-    "Error",
-    "Erreur",
-    "erreur",
-    "échoué"
-]
 
 # ----------------------------------------------------- #
 #                Récupération des mails                 #
@@ -56,9 +32,24 @@ m.list()
 date = (datetime.date.today() - datetime.timedelta(30)).strftime("%d-%b-%Y")
 msg_from = '"Yonathan Cardoso"'
 
+
 # ----------------------------------------------------- #
+#                       Listes                          #
+# ----------------------------------------------------- #
+class LstStatus(models.Model):
+    status = models.CharField(max_length=100)
+    word = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = "Liste status"
+
+    def __str__(self):
+        return self.word
 
 
+# ----------------------------------------------------- #
+#                      Méthodes                         #
+# ----------------------------------------------------- #
 def decode_str(word):
     """
     decode_str decode les chaines de caractère qui viennent des headers des mails.
@@ -71,7 +62,18 @@ def decode_str(word):
     return s
 
 
-# @sync_to_async
+def create_list(status):
+    """
+    create_list permet de créer une liste de mot à partir de QuerySet reçu de la base de données pour la table
+    LstStatus.
+
+    :param status: Entrez une chaine de caractère correspondant au status de la table LstStatus
+    :return: une liste de string
+    """
+    liste = list(LstStatus.objects.filter(status=status).values_list('word', flat=True))
+    return liste
+
+
 def get_mails(status):
     """
     get_mails est une fonction qui permet de récupérer les mails choisis pour les sortir dans un dico.
@@ -84,6 +86,8 @@ def get_mails(status):
     lst_mails = []
     lst_mails_ras = []
     lst_mails_error = []
+    lst_ras = create_list("ras")
+    lst_erreur = create_list("error")
 
     # Tri
     # result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
@@ -105,18 +109,16 @@ def get_mails(status):
         temp_dict['Subject'] = decode_str(s)
 
         if status == "ras":
-            if any(word in temp_dict['Subject'] for word in lst_RAS):
+            if any(word in temp_dict['Subject'] for word in lst_ras):
                 lst_mails.append(temp_dict)
-                print("ras")
         elif status == "error":
-            if any(word in temp_dict['Subject'] for word in lst_ERREUR):
+            if any(word in temp_dict['Subject'] for word in lst_erreur):
                 lst_mails.append(temp_dict)
-                print("error")
         else:
-            if any(word in temp_dict['Subject'] for word in lst_RAS):
+            if any(word in temp_dict['Subject'] for word in lst_ras):
                 lst_mails_ras.append(temp_dict)
 
-            if any(word in temp_dict['Subject'] for word in lst_ERREUR):
+            if any(word in temp_dict['Subject'] for word in lst_erreur):
                 lst_mails_error.append(temp_dict)
 
     if status == "ras" or status == "error":
@@ -128,18 +130,19 @@ def get_mails(status):
     return final_list
 
 
-# @sync_to_async
 def count_nb_mails():
     """
     count_nb_mails permet de compter le nombre de RAS et ERREUR.
 
-    :return: une liste contenant 3 paramétres :
+    :return: une liste contenant 3 paramètres :
         - Le nombre de RAS
         - Le nombre d'erreurs
         - Le nombre de mails non reçus
     """
     # Déclarations des variables utiles. Ne pas toucher
     ras = erreur = 0
+    lst_ras = create_list("ras")
+    lst_erreur = create_list("error")
 
     # Tri
     # result, data = m.search(None, '(FROM {msg_from} SENTSINCE {date})'.format(date=date, msg_from=msg_from))
@@ -157,10 +160,10 @@ def count_nb_mails():
         s = mail["Subject"]
         temp_dict['Subject'] = decode_str(s)
 
-        if any(word in temp_dict['Subject'] for word in lst_RAS):
+        if any(word in temp_dict['Subject'] for word in lst_ras):
             ras = ras + 1
 
-        if any(word in temp_dict['Subject'] for word in lst_ERREUR):
+        if any(word in temp_dict['Subject'] for word in lst_erreur):
             erreur = erreur + 1
 
     manque = len(id_list) - (ras + erreur)
